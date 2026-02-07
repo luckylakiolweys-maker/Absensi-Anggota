@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absensi RTI | Reformasi Tentara Indonesia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a2a 0%, #1a1a40 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* HEADER */
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(90deg, #000428 0%, #004e92 100%);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 3px solid #ff0000;
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.7);
+        }
+
+        .header h1 span.rti {
+            color: #00b4ff;
+            background-color: white;
+            padding: 0 15px;
+            border-radius: 10px;
+            margin: 0 10px;
+        }
+
+        .header h2 {
+            color: #ffdd00;
+            font-size: 1.5rem;
+            font-weight: 400;
+        }
+
+        .header .garis-merah {
+            height: 5px;
+            background: linear-gradient(90deg, #ff0000 0%, #ff6b6b 50%, #ff0000 100%);
+            margin: 20px auto;
+            width: 80%;
+            border-radius: 5px;
+        }
+
+        /* FORM ABSENSI */
+        .absensi-form {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #00b4ff;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 180, 255, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            color: #00b4ff;
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            border: 2px solid #333;
+            border-radius: 10px;
+            background-color: #0a0a2a;
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #ff0000;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-submit {
+            background: linear-gradient(90deg, #004e92 0%, #000428 100%);
+            color: white;
+            border: 2px solid #00b4ff;
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient(90deg, #0066cc 0%, #002244 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(0, 180, 255, 0.4);
+        }
+
+        .btn-reset {
+            background: linear-gradient(90deg, #8B0000 0%, #FF0000 100%);
+            color: white;
+            border: 2px solid #ff6b6b;
+        }
+
+        .btn-reset:hover {
+            background: linear-gradient(90deg, #cc0000 0%, #ff3333 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(255, 0, 0, 0.4);
+        }
+
+        /* DAFTAR HADIR */
+        .daftar-hadir {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid white;
+            margin-top: 30px;
+        }
+
+        .daftar-hadir h3 {
+            color: #00b4ff;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ff0000;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        thead {
+            background: linear-gradient(90deg, #000428 0%, #8B0000 100%);
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            color: white;
+            font-size: 1.1rem;
+            border-right: 1px solid #333;
+        }
+
+        th:last-child {
+            border-right: none;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #333;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        tr:nth-child(even) td {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        tr:hover td {
+            background-color: rgba(255, 0, 0, 0.1);
+        }
+
+        .timestamp {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #aaa;
+            font-size: 0.9rem;
+            border-top: 1px solid #333;
+        }
+
+        /* NOTIFIKASI ERROR/SUCCESS */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 20px 30px;
+            border-radius: 10px;
+            font-weight: bold;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.5s;
+            max-width: 400px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: linear-gradient(90deg, #004e92 0%, #008000 100%);
+            border: 2px solid #00ff00;
+            color: white;
+        }
+
+        .notification.error {
+            background: linear-gradient(90deg, #8B0000 0%, #FF0000 100%);
+            border: 2px solid #ff6b6b;
+            color: white;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>ABSENSI <span class="rti">RTI</span></h1>
+            <h2>Reformasi Tentara Indonesia</h2>
+            <div class="garis-merah"></div>
+            <p>Sistem Absensi Digital - Tema: Biru, Hitam, Putih, Merah</p>
+        </div>
+
+        <!-- FORM ABSENSI -->
+        <div class="absensi-form">
+            <h3>Form Absensi Anggota</h3>
+            <form id="formAbsensi">
+                <div class="form-group">
+                    <label for="nama">Nama Lengkap *</label>
+                    <input type="text" id="nama" class="form-control" placeholder="Masukkan nama lengkap" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="pangkat">Pangkat / Jabatan</label>
+                    <input type="text" id="pangkat" class="form-control" placeholder="Contoh: Letnan, Sersan, dll">
+                </div>
+                
+                <div class="form-group">
+                    <label for="keterangan">Keterangan Kehadiran *</label>
+                    <select id="keterangan" class="form-control" required>
+                        <option value="">-- Pilih Keterangan --</option>
+                        <option value="Hadir">Hadir</option>
+                        <option value="Sakit">Sakit</option>
+                        <option value="Izin">Izin</option>
+                        <option value="Dinas Luar">Dinas Luar</option>
+                        <option value="Cuti">Cuti</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="catatan">Catatan (Opsional)</label>
+                    <textarea id="catatan" class="form-control" rows="3" placeholder="Catatan tambahan..."></textarea>
+                </div>
+                
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-submit">Simpan Absensi</button>
+                    <button type="button" id="resetBtn" class="btn btn-reset">Reset Form</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- DAFTAR HADIR -->
+        <div class="daftar-hadir">
+            <h3>Daftar Hadir Anggota RTI</h3>
+            <div id="dataKosong" style="text-align: center; padding: 30px; color: #aaa; display: none;">
+                <p>Belum ada data absensi. Silakan isi form di atas.</p>
+            </div>
+            <table id="tabelAbsensi" style="display: none;">
+                <thead>
+                    <tr>
+                        <th width="5%">No</th>
+                        <th width="25%">Nama</th>
+                        <th width="20%">Pangkat</th>
+                        <th width="15%">Status</th>
+                        <th width="25%">Catatan</th>
+                        <th width="10%">Waktu</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelBody">
+                    <!-- Data akan dimuat di sini -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <p>Sistem Absensi RTI &copy; 2024 - Reformasi Tentara Indonesia</p>
+            <p>Data disimpan secara lokal di browser Anda</p>
+        </div>
+    </div>
+
+    <!-- NOTIFIKASI -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // Inisialisasi data
+        let dataAbsensi = JSON.parse(localStorage.getItem('absensi_rti')) || [];
+        
+        // DOM Elements
+        const form = document.getElementById('formAbsensi');
+        const tabelAbsensi = document.getElementById('tabelAbsensi');
+        const tabelBody = document.getElementById('tabelBody');
+        const dataKosong = document.getElementById('dataKosong');
+        const resetBtn = document.getElementById('resetBtn');
+        const notification = document.getElementById('notification');
+        
+        // Tampilkan data yang sudah ada
+        tampilkanData();
+        
+        // Event: Submit form
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            try {
+                // Validasi input
+                const nama = document.getElementById('nama').value.trim();
+                const keterangan = document.getElementById('keterangan').value;
+                
+                if (!nama) {
+                    tampilkanNotifikasi('error', 'Nama tidak boleh kosong!');
+                    return;
+                }
+                
+                if (!keterangan) {
+                    tampilkanNotifikasi('error', 'Pilih keterangan kehadiran!');
+                    return;
+                }
+                
+                // Data absensi
+                const absensi = {
+                    id: Date.now(),
+                    nama: nama,
+                    pangkat: document.getElementById('pangkat').value.trim(),
+                    keterangan: keterangan,
+                    catatan: document.getElementById('catatan').value.trim(),
+                    timestamp: new Date().toLocaleString('id-ID')
+                };
+                
+                // Simpan ke array
+                dataAbsensi.unshift(absensi); // Tambah di awal array
+                
+                // Simpan ke localStorage
+                localStorage.setItem('absensi_rti', JSON.stringify(dataAbsensi));
+                
+                // Tampilkan data
+                tampilkanData();
+                
+                // Reset form
+                form.reset();
+                
+                // Tampilkan notifikasi sukses
+                tampilkanNotifikasi('success', `Absensi ${nama} berhasil disimpan!`);
+                
+            } catch (error) {
+                // Tangani error dengan baik
+                tampilkanNotifikasi('error', `Terjadi kesalahan: ${error.message}`);
+                console.error('Error saat menyimpan absensi:', error);
+            }
+        });
+        
+        // Event: Reset form
+        resetBtn.addEventListener('click', function() {
+            form.reset();
+            tampilkanNotifikasi('success', 'Form berhasil direset!');
+        });
+        
+        // Fungsi tampilkan data
+        function tampilkanData() {
+            if (dataAbsensi.length === 0) {
+                tabelAbsensi.style.display = 'none';
+                dataKosong.style.display = 'block';
+                return;
+            }
+            
+            dataKosong.style.display = 'none';
+            tabelAbsensi.style.display = 'table';
+            
+            // Kosongkan tabel
+            tabelBody.innerHTML = '';
+            
+            // Isi tabel dengan data
+            dataAbsensi.forEach((item, index) => {
+                const row = document.createElement('tr');
+                
+                // Warna baris berdasarkan status
+                if (item.keterangan === 'Hadir') {
+                    row.style.borderLeft = '5px solid #00ff00';
+                } else if (item.keterangan === 'Sakit') {
+                    row.style.borderLeft = '5px solid #ff9900';
+                } else if (item.keterangan === 'Izin') {
+                    row.style.borderLeft = '5px solid #00b4ff';
+                } else {
+                    row.style.borderLeft = '5px solid #ff0000';
+                }
+                
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td><strong>${escapeHtml(item.nama)}</strong></td>
+                    <td>${escapeHtml(item.pangkat || '-')}</td>
+                    <td><span class="status" style="
+                        padding: 5px 10px;
+                        border-radius: 5px;
+                        font-weight: bold;
+                        background-color: ${getStatusColor(item.keterangan)};
+                    ">${escapeHtml(item.keterangan)}</span></td>
+                    <td>${escapeHtml(item.catatan || '-')}</td>
+                    <td class="timestamp">${item.timestamp}</td>
+                `;
+                
+                tabelBody.appendChild(row);
+            });
+        }
+        
+        // Fungsi untuk notifikasi
+        function tampilkanNotifikasi(type, message) {
+            // Set konten dan class
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            
+            // Tampilkan
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            // Sembunyikan setelah 5 detik
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        }
+        
+        // Fungsi helper: warna berdasarkan status
+        function getStatusColor(status) {
+            switch(status) {
+                case 'Hadir': return 'rgba(0, 255, 0, 0.2)';
+                case 'Sakit': return 'rgba(255, 153, 0, 0.2)';
+                case 'Izin': return 'rgba(0, 180, 255, 0.2)';
+                default: return 'rgba(255, 0, 0, 0.2)';
+            }
+        }
+        
+        // Fungsi helper: escape HTML untuk keamanan
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Pesan saat pertama kali load
+        window.addEventListener('load', function() {
+            console.log('Sistem Absensi RTI siap digunakan!');
+            if (dataAbsensi.length > 0) {
+                tampilkanNotifikasi('success', `Data absensi ditemukan: ${dataAbsensi.length} entri`);
+            }
+        });
+        
+        // Backup data (opsional)
+        function backupData() {
+            const dataStr = JSON.stringify(dataAbsensi);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            const exportFileDefaultName = `backup_absensi_rti_${new Date().toISOString().split('T')[0]}.json`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+        }
+        
+        // Untuk mengakses fungsi backup dari console jika diperlukan
+        window.backupData = backupData;
+        
+        // Tangani error global
+        window.addEventListener('error', function(e) {
+            tampilkanNotifikasi('error', `Error: ${e.message}`);
+            console.error('Global error:', e);
+        });
+    </script>
+</body>
+</html>
